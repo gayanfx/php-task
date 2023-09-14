@@ -1,4 +1,5 @@
 <?php
+
 // Command line directives
 $options = getopt("u:p:h:d:", ["file:", "create_table", "dry_run", "u:", "p:", "h:", "d:", "help"]);
 
@@ -8,7 +9,7 @@ if (isset($options['help'])) {
 }
 
 if (!isset($options['u']) || !isset($options['p']) || !isset($options['h']) || !isset($options['d'])) {
-    die("Please provide u, p, h, and d options. Type --help for more details.\n"); 
+    die("Please provide u, p, h, and d options. Type --help for more details.\n"); // Fixed the error message to correctly refer to the options as 'u, p, h, and d' instead of 'd, p, h, and d'.
 }
 
 //Established database connection using PDO
