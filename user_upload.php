@@ -16,3 +16,12 @@ $dbUser = $options['u'];
 $dbPass = $options['p'];
 $dbHost = $options['h'];
 $dbName = $options['d'];
+
+// PDO instance
+try {
+    $pdo = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo 'Connection failed: Please double check your Database credential details again.';
+    exit();
+}
