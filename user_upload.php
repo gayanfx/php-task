@@ -10,3 +10,9 @@ if (isset($options['help'])) {
 if (!isset($options['u']) || !isset($options['p']) || !isset($options['h']) || !isset($options['d'])) {
     die("Please provide u, p, h, and d options. Type --help for more details.\n"); 
 }
+
+//Established database connection using PDO
+$dbUser = $options['u'];
+$dbPass = $options['p'];
+$dbHost = $options['h'];
+$dbName = $options['d'];
