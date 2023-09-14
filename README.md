@@ -59,5 +59,5 @@ Loop through each row in the CSV file, validating the data (checking for missing
 If the --dry_run option is not set, it will insert the valid data into the 'users' table in the database.
 If a duplicate email address is detected, or any other database error occurs, it will handle the error separately and continue processing.
 ```shell
-php user_upload.php -u sandboxdrupal_gayan -p Dit2m41630123 -h localhost -d sandboxdrupal_gayan --file users.csv
+php user_upload.php -u yourUsername -p yourPassword -h yourHost -d databaseName --file users.csv
 ```
