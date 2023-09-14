@@ -45,3 +45,18 @@ if (isset($options['create_table'])) {
     }
     die();
 }
+
+// After creating the table, check and add the unique index
+try {
+    $result = $pdo->query("SHOW INDEXES FROM users WHERE Key_name = 'unique_email'");
+    if ($result->rowCount() == 0) {
+        $pdo->exec("ALTER TABLE users ADD UNIQUE INDEX `unique_email` (`email`)");
+    }
+} catch (PDOException $e) {
+    if ($e->getCode() == "42S02") {
+        echo "Please create the table first using the --create_table directive. --help for more details.\n";
+    } else {
+        echo "Error: " . $e->getMessage();
+    }
+    exit();
+}
