@@ -66,6 +66,65 @@ function validateEmail($email) {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 
+// Reading and processing CSV file
+if (isset($options['file'])) {
+    
+    $filePath = $options['file'];
+    
+    // Check if the file has .csv extension
+    if (pathinfo($filePath, PATHINFO_EXTENSION) !== 'csv') {
+        die("Error: The file should have a .csv extension. Type --help for more details.\n");
+    }
+
+    // Check if the file can be opened
+    if (($handle = fopen($filePath, "r")) === FALSE) {
+        die("Error: Unable to open the file. Check if the file exists and has the correct permissions.\n");
+    }
+
+    $header = fgetcsv($handle);
+    $rowCount = 1;
+
+    while (($data = fgetcsv($handle)) !== FALSE) {
+        $rowCount++;
+        
+        // Check for missing data
+        if (count($data) < 3 || in_array(null, $data, true)) {
+            echo "Error: Missing data at row $rowCount. Skipping this row.\n";
+            continue;
+        }
+        
+        // Check for valid email
+        if (!validateEmail($data[2])) {
+            echo "Error: Invalid email format at row $rowCount. Skipping this row.\n";
+            continue;
+        }
+
+        // If --dry_run option is not set, insert data into database
+        if (!isset($options['dry_run'])) {
+            try {
+                $stmt = $pdo->prepare("INSERT INTO users (name, surname, email) VALUES (?, ?, ?)");
+                $stmt->execute([$data[0], $data[1], $data[2]]);
+                echo "Row $rowCount processed successfully.\n";
+            } catch (PDOException $e) {
+                if ($e->errorInfo[1] == 1062) {
+                    echo "Error: Duplicate email address at row $rowCount. Skipping this row.\n";
+                } else {
+                    echo "Error: Database error at row $rowCount: " . $e->getMessage() . ". Skipping this row.\n";
+                }
+                continue;
+            }
+        } else {
+            echo "Dry run: Row $rowCount - Name: {$data[0]}, Surname: {$data[1]}, Email: {$data[2]} - processed successfully (Not inserted into database).\n";
+        }
+    }
+
+    fclose($handle);
+
+    echo "=====================================================================\n";
+    echo "              CSV file processed successfully                        \n";
+    echo "=====================================================================\n";
+}
+
 function displayHelpMessage() {
     echo "=====================================================================\n";
     echo "                      CSV Upload Directive help                      \n";
