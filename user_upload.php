@@ -60,3 +60,37 @@ try {
     }
     exit();
 }
+
+function displayHelpMessage() {
+    echo "=====================================================================\n";
+    echo "                      CSV Upload Directive help                      \n";
+    echo "=====================================================================\n";
+    echo "1) Passing Database credentials.\n";
+    echo "-u – MySQL Username\n";
+    echo "-p – MySQL Password\n";
+    echo "-h – MySQL Host\n";
+    echo "-d – MySQL Database Name\n"; // Corrected from '-h' to '-d' for database name
+    echo "  Example create table ( php user_upload.php -u yourUsername -p yourPassword -h yourHost -d databaseName )\n";
+    echo "-------------------------------------------------------------------\n";
+    echo "2) Create a table.\n";
+    echo "--create_table – this will cause the MySQL users table to be built (and no further action will be taken)\n";
+    echo "  Example create table ( php user_upload.php -u yourUsername -p yourPassword -h yourHost -d databaseName --create_table )\n";
+    echo "-------------------------------------------------------------------\n";
+    echo "3) Dry run.\n";
+    echo "--dry_run – this will be used with the --file directive in case we want to run the script but not insert into the DB.\n";
+    echo " All other functions will be executed, but the database won't be altered\n";
+    echo "  Example create table ( php user_upload.php -u yourUsername -p yourPassword -h yourHost -d databaseName --file filename.csv --dry_run )\n";
+    echo "-------------------------------------------------------------------\n";
+    echo "4) Processs CSV file.\n";
+    echo "--file [csv file name] – this is the name of the CSV to be parsed\n";
+    echo "  Example create table ( php user_upload.php -u yourUsername -p yourPassword -h yourHost -d databaseName --file filename.csv )\n";
+    echo "-------------------------------------------------------------------\n";
+    echo "5) Directive help.\n";
+    echo "--help – which will output the above list of directives with details\n";
+    echo "=====================================================================\n";
+}
+
+// Closing the database connection
+$pdo = null;
+
+?>
