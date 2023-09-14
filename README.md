@@ -61,7 +61,3 @@ If a duplicate email address is detected, or any other database error occurs, it
 ```shell
 php user_upload.php -u sandboxdrupal_gayan -p Dit2m41630123 -h localhost -d sandboxdrupal_gayan --file users.csv
 ```
-
-## Closing Remarks / Assumptions.
-This script helps automate the process of parsing and uploading CSV data into a MySQL database. It provides flexibility through various options, making it a versatile tool for handling data imports.
-Please ensure that you have the necessary MySQL credentials and access permissions before running the script.
