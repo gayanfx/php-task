@@ -25,3 +25,23 @@ try {
     echo 'Connection failed: Please double check your Database credential details again.';
     exit();
 }
+
+if (isset($options['create_table'])) {
+    try {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS users (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(255) NOT NULL,
+                        surname VARCHAR(255) NOT NULL,
+                        email VARCHAR(255) NOT NULL UNIQUE
+                    )");
+        echo "Table 'users' created successfully.\n";
+    } catch (PDOException $e) {
+        if ($e->getCode() == "42S02") {
+            echo "Please create the table first using the --create_table directive. --help for more details.\n";
+        } else {
+            echo "Error: " . $e->getMessage();
+        }
+        exit();
+    }
+    die();
+}
