@@ -18,8 +18,8 @@ class UserUploader {
             exit();
         }
 
-        // Establish DB connection if it's not a help or dry_run command
-        if (!isset($options['dry_run'])) {
+        // Only establish DB connection if it's not a help or dry_run command
+        if (!isset($options['dry_run']) && !isset($options['create_table'])) {
             $this->initializeDBCredentials($options);
             $this->establishConnection();
         }
@@ -49,6 +49,9 @@ class UserUploader {
 
     // Method to create table in the database
     public function createTable() {
+        $this->initializeDBCredentials($this->options);
+        $this->establishConnection();
+
         try {
             $this->pdo->exec("CREATE TABLE IF NOT EXISTS users (
                                 id INT AUTO_INCREMENT PRIMARY KEY,
