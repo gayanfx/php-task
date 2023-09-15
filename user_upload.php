@@ -74,7 +74,16 @@ class UserUploader {
         if (pathinfo($filePath, PATHINFO_EXTENSION) !== 'csv') {
             die("Error: The file should have a .csv extension. Type --help for more details.\n");
         }
-
+    
+        // Check if the file mime type is text/csv
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $filePath);
+        finfo_close($finfo);
+        
+        if ($mimeType !== 'text/plain' && $mimeType !== 'text/csv') {
+            die("Error: The file should be a valid CSV file with mime type 'text/csv' or 'text/plain'. Type --help for more details.\n");
+        }
+    
         // Check if the file can be opened
         if (($handle = fopen($filePath, "r")) === FALSE) {
             die("Error: Unable to open the file. Check if the file exists and has the correct permissions.\n");
