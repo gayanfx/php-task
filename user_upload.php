@@ -136,22 +136,28 @@ class UserUploader {
         echo "=====================================================================\n";
     }
 
-    // Method to initiate the process
-    private function run() {
-        // Check if --create_table is set in options to create table and exit
-        if (isset($this->options['create_table'])) {
-            $this->createTable();
-            exit();
-        }
-
-        // Check if --file is set in options to process the file
-        if (isset($this->options['file'])) {
-            $this->processFile($this->options['file'], isset($this->options['dry_run']));
-            exit();
-        }
-
-        echo "Error: Invalid options provided. Type --help for more details.\n";
+// Method to initiate the process
+private function run() {
+    // Check if --create_table is set in options to create table and exit
+    if (isset($this->options['create_table'])) {
+        $this->createTable();
+        exit();
     }
+
+    // Check if --file is set in options to process the file
+    if (isset($this->options['file'])) {
+        $this->processFile($this->options['file'], isset($this->options['dry_run']));
+        exit();
+    }
+
+    // If --file option is not set, display an error message
+    if (!isset($this->options['file'])) {
+        echo "Error: The --file option is not set. Please specify a CSV file to process. Type --help for more details.\n";
+        exit();
+    }
+
+    echo "Error: Invalid options provided. Type --help for more details.\n";
+}
 }
 
 // Get options from the command line arguments
