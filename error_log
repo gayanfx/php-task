@@ -5,3 +5,25 @@ Stack trace:
 #2 /home/sandboxdrupal/public_html/php-task/user_upload.php(181): UserUploader->__construct(Array)
 #3 {main}
   thrown in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 80
+[15-Sep-2023 23:56:12 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function finfo_open() in /home/sandboxdrupal/public_html/php-task/user_upload.php:93
+Stack trace:
+#0 /home/sandboxdrupal/public_html/php-task/user_upload.php(175): UserUploader->processFile('users.csv', true)
+#1 /home/sandboxdrupal/public_html/php-task/user_upload.php(57): UserUploader->run()
+#2 /home/sandboxdrupal/public_html/php-task/user_upload.php(194): UserUploader->__construct(Array)
+#3 {main}
+  thrown in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 93
+[15-Sep-2023 23:56:29 UTC] PHP Warning:  Undefined array key "u" in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 15
+[15-Sep-2023 23:56:29 UTC] PHP Warning:  Undefined array key "p" in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 16
+[15-Sep-2023 23:56:29 UTC] PHP Warning:  Undefined array key "h" in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 17
+[15-Sep-2023 23:56:29 UTC] PHP Warning:  Undefined array key "d" in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 18
+[15-Sep-2023 23:56:35 UTC] PHP Warning:  Undefined array key "u" in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 15
+[15-Sep-2023 23:56:35 UTC] PHP Warning:  Undefined array key "p" in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 16
+[15-Sep-2023 23:56:35 UTC] PHP Warning:  Undefined array key "h" in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 17
+[15-Sep-2023 23:56:35 UTC] PHP Warning:  Undefined array key "d" in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 18
+[15-Sep-2023 23:56:41 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function finfo_open() in /home/sandboxdrupal/public_html/php-task/user_upload.php:93
+Stack trace:
+#0 /home/sandboxdrupal/public_html/php-task/user_upload.php(175): UserUploader->processFile('users.csv', true)
+#1 /home/sandboxdrupal/public_html/php-task/user_upload.php(57): UserUploader->run()
+#2 /home/sandboxdrupal/public_html/php-task/user_upload.php(194): UserUploader->__construct(Array)
+#3 {main}
+  thrown in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 93

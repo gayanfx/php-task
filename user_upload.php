@@ -1,43 +1,25 @@
 <?php
 
-class UserUploader {
-    private $dbUser;
-    private $dbPass;
-    private $dbHost;
-    private $dbName;
-    private $pdo;
-    private $options;
+class Database
+{
+    private PDO $pdo;
 
-    // Constructor to initialize database credentials and connection if necessary
-    public function __construct($options) {
-        $this->options = $options;
-
-        // Check if help is set in options to display help message
-        if (isset($options['help'])) {
-            $this->displayHelpMessage();
-            exit();
-        }
-
-        // Only establish DB connection if it's not a help or dry_run command
-        if (!isset($options['dry_run']) && !isset($options['create_table'])) {
-            $this->initializeDBCredentials($options);
-            $this->establishConnection();
-        }
-
-        // Start the process based on the options provided
-        $this->run();
+    public function __construct(array $options)
+    {
+        $this->initializeDBCredentials($options);
+        $this->establishConnection();
     }
 
-    // Method to initialize database credentials
-    private function initializeDBCredentials($options) {
+    private function initializeDBCredentials(array $options): void
+    {
         $this->dbUser = $options['u'];
         $this->dbPass = $options['p'];
         $this->dbHost = $options['h'];
         $this->dbName = $options['d'];
     }
 
-    // Method to establish a connection to the database
-    private function establishConnection() {
+    private function establishConnection(): void
+    {
         try {
             $this->pdo = new PDO("mysql:host={$this->dbHost};dbname={$this->dbName}", $this->dbUser, $this->dbPass);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -47,10 +29,39 @@ class UserUploader {
         }
     }
 
-    // Method to create table in the database
-    public function createTable() {
-        $this->initializeDBCredentials($this->options);
-        $this->establishConnection();
+    public function getPdo(): PDO
+    {
+        return $this->pdo;
+    }
+}
+
+class UserUploader
+{
+    private ?PDO $pdo = null;
+    private array $options;
+
+    public function __construct(array $options, ?Database $database = null)
+    {
+        $this->options = $options;
+
+        if (isset($options['help'])) {
+            $this->displayHelpMessage();
+            exit();
+        }
+
+        if (!isset($options['dry_run']) && !isset($options['create_table'])) {
+            $database = new Database($options);
+            $this->pdo = $database->getPdo();
+        }
+
+        $this->run();
+    }
+
+    public function createTable(): void
+    {
+        if ($this->pdo === null) {
+            $this->pdo = (new Database($this->options))->getPdo();
+        }
 
         try {
             $this->pdo->exec("CREATE TABLE IF NOT EXISTS users (
@@ -66,12 +77,11 @@ class UserUploader {
         }
     }
 
-    // Method to validate email format
-    private function validateEmail($email) {
+    private function validateEmail(string $email): bool
+    {
         $email = trim($email); // Trimming whitespace and other characters from both sides of the email string
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
-
     // Method to process the CSV file and handle database operations
     private function processFile($filePath, $dryRun) {
         // Check if the file has .csv extension
