@@ -1,0 +1,7 @@
+[15-Sep-2023 23:45:41 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function finfo_open() in /home/sandboxdrupal/public_html/php-task/user_upload.php:80
+Stack trace:
+#0 /home/sandboxdrupal/public_html/php-task/user_upload.php(162): UserUploader->processFile('users.csv', false)
+#1 /home/sandboxdrupal/public_html/php-task/user_upload.php(28): UserUploader->run()
+#2 /home/sandboxdrupal/public_html/php-task/user_upload.php(181): UserUploader->__construct(Array)
+#3 {main}
+  thrown in /home/sandboxdrupal/public_html/php-task/user_upload.php on line 80

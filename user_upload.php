@@ -65,6 +65,7 @@ class UserUploader {
 
     // Method to validate email format
     private function validateEmail($email) {
+        $email = trim($email); // Trimming whitespace and other characters from both sides of the email string
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 
@@ -74,16 +75,16 @@ class UserUploader {
         if (pathinfo($filePath, PATHINFO_EXTENSION) !== 'csv') {
             die("Error: The file should have a .csv extension. Type --help for more details.\n");
         }
-    
+
         // Check if the file mime type is text/csv
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($finfo, $filePath);
         finfo_close($finfo);
-        
+
         if ($mimeType !== 'text/plain' && $mimeType !== 'text/csv') {
             die("Error: The file should be a valid CSV file with mime type 'text/csv' or 'text/plain'. Type --help for more details.\n");
         }
-    
+
         // Check if the file can be opened
         if (($handle = fopen($filePath, "r")) === FALSE) {
             die("Error: Unable to open the file. Check if the file exists and has the correct permissions.\n");
@@ -100,6 +101,9 @@ class UserUploader {
                 echo "Error: Missing data at row $rowCount. Skipping this row.\n";
                 continue;
             }
+
+            // Trim the email before validating
+            $data[2] = trim($data[2]);
 
             // Check for valid email
             if (!$this->validateEmail($data[2])) {
@@ -145,32 +149,34 @@ class UserUploader {
         echo "=====================================================================\n";
     }
 
-// Method to initiate the process
-private function run() {
-    // Check if --create_table is set in options to create table and exit
-    if (isset($this->options['create_table'])) {
-        $this->createTable();
+    // Method to initiate the process
+    private function run() {
+        // Check if --create_table is set in options to create table and exit
+        if (isset($this->options['create_table'])) {
+            $this->createTable();
+            exit();
+        }
+
+        // Check if --file is set in options to process the file
+        if (isset($this->options['file'])) {
+            $this->processFile($this->options['file'], isset($this->options['dry_run']));
+            exit();
+        }
+
+        // If --file option is not set, display an error message
+        if (!isset($this->options['file'])) {
+            echo "Error: The --file option is not set. Please specify a CSV file to process. Type --help for more details.\n";
+            exit();
+        }
+
+        echo "Error: Unrecognized option. Type --help for more details.\n";
         exit();
     }
-
-    // Check if --file is set in options to process the file
-    if (isset($this->options['file'])) {
-        $this->processFile($this->options['file'], isset($this->options['dry_run']));
-        exit();
-    }
-
-    // If --file option is not set, display an error message
-    if (!isset($this->options['file'])) {
-        echo "Error: The --file option is not set. Please specify a CSV file to process. Type --help for more details.\n";
-        exit();
-    }
-
-    echo "Error: Invalid options provided. Type --help for more details.\n";
 }
-}
 
-// Get options from the command line arguments
-$options = getopt("", ["file::", "create_table", "dry_run", "help", "u::", "p::", "h::", "d::"]);
+// Get the options from the command line arguments
+$options = getopt('', ['file::', 'create_table', 'dry_run', 'u::', 'p::', 'h::', 'd::', 'help']);
 
-// Instantiate the UserUploader class and pass the options to it
-$newUploader = new UserUploader($options);
+// Create an instance of UserUploader and pass the options
+new UserUploader($options);
+?>
